@@ -1,28 +1,23 @@
-# vue-project
+# VueSneakers
+Учебный проект для изучения возможностей фреймворка Vue.js и Tailwind CSS
 
-This template should help get you started developing with Vue 3 in Vite.
+## Используемые технологии:
+- Vue.js
+- Tailwind CSS
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+## Запуск проекта
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Компиляция и Hot-Reload для разработки
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Компиляция для продакшена
 
 ```sh
 npm run build
