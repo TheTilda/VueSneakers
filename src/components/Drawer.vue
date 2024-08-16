@@ -2,6 +2,7 @@
 import CartItem from './CartItem.vue';
 import DrawerHead from './DrawerHead.vue';
 import CartLItemList from './CartLItemList.vue';
+
 </script>
 
 <template>

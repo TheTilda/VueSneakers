@@ -6,6 +6,13 @@ import CardList from './components/CardList.vue';
 import Drawer from './components/Drawer.vue';
 
 const items = ref([]);
+const countFavorites = ref(0);
+
+const drawerOpen = ref(false);
+
+const changeDrawerState = () => {
+    drawerOpen.value = !drawerOpen.value
+}
 
 const filters = reactive({
     sortBy: 'title',
@@ -25,7 +32,7 @@ const fetchFavorites = async () => {
         const { data: favorites } = await axios.get(
             `https://75ad0bbae141dd64.mokky.dev/favorites`
         )
-
+        countFavorites.value = favorites.length
         items.value = items.value.map((item) => {
             const favorite = favorites.find((favorite) => favorite.parentId === item.id)
             console.log(favorite)
@@ -53,11 +60,16 @@ const addFavorite = async (item) => {
             const {data} = await axios.post(
                 `https://75ad0bbae141dd64.mokky.dev/favorites`, obj
             )
-            
+            countFavorites.value += 1
             item.isFavorite = !item.isFavorite;
             item.favoriteId = data.id
             console.log(data)
-            }
+        }else {
+            await axios.delete(`https://75ad0bbae141dd64.mokky.dev/favorites/${item.favoriteId}`)
+            countFavorites.value -= 1
+            item.isFavorite = !item.isFavorite;
+            item.favoriteId = null
+        }
 
     } catch (err){
 
@@ -100,16 +112,17 @@ onMounted(async() => {
 watch(filters, fetchItems)
 
 provide('addFavorite', addFavorite)
+provide('changeDrawerState', changeDrawerState)
 
 </script>
 
 <template>
 <div>
-    <!-- <Drawer /> -->
+    <Drawer v-if="drawerOpen"/>
 
     <div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
 
-        <Header/>
+        <Header :countFavorites="countFavorites"/>
         
         <div class="p-10">
             <div class="flex justify-between items-center">
