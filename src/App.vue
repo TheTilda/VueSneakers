@@ -29,6 +29,18 @@ const onChangeSearchInput = (event) => {
     filters.searchQuery = event.target.value
 }
 
+const addToCart = (item) => {
+    if (!item.isAdded) {
+        cart.value.push(item)
+        item.isAdded = true
+    } else {
+        cart.value.splice(cart.value.indexOf(item), 1)
+        item.isAdded = false
+    }
+    
+    console.log(cart)
+}
+
 const fetchFavorites = async () => {
     try{
         const { data: favorites } = await axios.get(
@@ -115,6 +127,8 @@ watch(filters, fetchItems)
 
 provide('addFavorite', addFavorite)
 provide('changeDrawerState', changeDrawerState)
+provide('cart', cart)
+provide('addToCart', addToCart)
 
 </script>
 
@@ -145,7 +159,7 @@ provide('changeDrawerState', changeDrawerState)
                 </div>
             </div>
             <div>
-                <CardList :items="items" @addToFavorite="addFavorite"/>
+                <CardList :items="items" @addToFavorite="addFavorite" @add-to-cart="addToCart"/>
             </div>
         </div>
     </div>  
