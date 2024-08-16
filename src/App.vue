@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch, reactive } from 'vue';
+import { onMounted, ref, watch, reactive, provide } from 'vue';
 import axios from 'axios';
 import Header from './components/Header.vue';
 import CardList from './components/CardList.vue';
@@ -22,12 +22,13 @@ const onChangeSearchInput = (event) => {
 
 const fetchFavorites = async () => {
     try{
-        const {data: favorites} = await axios.get(
-            `https://75ad0bbae141dd64.mokky.dev/favorites`, {params: params}
+        const { data: favorites } = await axios.get(
+            `https://75ad0bbae141dd64.mokky.dev/favorites`
         )
 
         items.value = items.value.map((item) => {
-            const favorites = favorites.find(favorite => favorite.id === item.id)
+            const favorite = favorites.find((favorite) => favorite.parentId === item.id)
+            console.log(favorite)
             if (!favorite) {
                 return item;
             }
@@ -37,11 +38,33 @@ const fetchFavorites = async () => {
                 favoriteId: favorite.id
             }
         })
+        console.log(items.value)
     } catch(e){
         console.log(e)
     }
 }
 
+const addFavorite = async (item) => {
+    try{
+        if (!item.isFavorite) {
+            const obj = {
+                parentId: item.id
+            }
+            const {data} = await axios.post(
+                `https://75ad0bbae141dd64.mokky.dev/favorites`, obj
+            )
+            
+            item.isFavorite = !item.isFavorite;
+            item.favoriteId = data.id
+            console.log(data)
+            }
+
+    } catch (err){
+
+    }
+    
+    console.log(item);
+}
 
 const fetchItems = async () => {
     try{
@@ -64,7 +87,6 @@ const fetchItems = async () => {
             isFavorite: false,
             isAdded: false
         }))
-
     } catch(e){
         console.log(e)
     }
@@ -72,10 +94,12 @@ const fetchItems = async () => {
 
 onMounted(async() => {
     await fetchItems();
+    await fetchFavorites();
 
 })
 watch(filters, fetchItems)
 
+provide('addFavorite', addFavorite)
 
 </script>
 
@@ -106,7 +130,7 @@ watch(filters, fetchItems)
                 </div>
             </div>
             <div>
-                <CardList :items="items"/>
+                <CardList :items="items" @addToFavorite="addFavorite"/>
             </div>
         </div>
     </div>  
