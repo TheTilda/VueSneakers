@@ -6,7 +6,9 @@ import CardList from './components/CardList.vue';
 import Drawer from './components/Drawer.vue';
 
 const items = ref([]);
+const cart = ref([]);
 const countFavorites = ref(0);
+
 
 const drawerOpen = ref(false);
 
