@@ -4,6 +4,7 @@ import { inject } from 'vue';
 
 defineProps({
     countFavorites: Number,
+    totalPrice: Number
 })
 
 const changeDrawerState = inject('changeDrawerState')
@@ -23,7 +24,7 @@ const changeDrawerState = inject('changeDrawerState')
     <ul class="flex items-center gap-10 text-gray-500 ">
         <li @click="changeDrawerState" class="flex items-center gap-3 hover:text-black cursor-pointer">
             <img src="/cart.svg" alt="Cart">
-            <b>1205 руб.</b>
+            <b>{{ totalPrice }} руб.</b>
         </li>
         <li class="flex items-center gap-3 hover:text-black cursor-pointer">
             <div class="relative">
